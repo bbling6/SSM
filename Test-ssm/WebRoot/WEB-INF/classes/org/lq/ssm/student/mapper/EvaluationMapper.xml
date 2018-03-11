@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.student.dao.EvaluationDao">
+	<resultMap type="studentEvaluation" id="studentEvaluation_map">
+		<id property="id" column="evaluation_id"/>
+		<result property="title" column="evaluation_title"/>
+		<result property="content" column="evaluation_content"/>
+		<result property="course" column="evaluation_course"/>
+		<result property="teacher" column="evaluation_teacher"/>
+		<result property="etime" column="evaluation_time"/>
+		<association property="student" column="student_id" resultMap="student_map"></association>
+	</resultMap>
+	<resultMap type="student" id="student_map">
+		<id property="id" column="student_id"/>
+		<result property="name" column="student_name"/>	
+	</resultMap>
+	
+	<!-- 查询全部 -->
+	<select id="findAll" resultMap="studentEvaluation_map">
+		select * from evaluation_info e left join 
+		student_info s on e.student_id=s.student_id
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="save" parameterType="studentEvaluation">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select evaluation_seq.nextval from dual
+		</selectKey>
+		insert into evaluation_info
+        (evaluation_id, student_id, evaluation_title, evaluation_content, evaluation_course, evaluation_teacher, evaluation_time)
+        values
+        (#{id}, #{student.id}, #{title}, #{content}, #{course}, #{teacher}, #{etime})
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="studentEvaluation">
+		update evaluation_info
+   	   set evaluation_id = #{id},
+	       student_id = #{student.id},
+	       evaluation_title = #{title},
+	       evaluation_content = #{content},
+	       evaluation_course = #{course},
+	       evaluation_teacher = #{teacher},
+	       evaluation_time = #{etime}
+ 	 where evaluation_id = #{id}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="studentEvaluation">
+		delete from evaluation_info
+ 		where evaluation_id = #{id}
+	</delete>
+	
+	<!-- 通过id查询 -->
+	<select id="findById" resultMap="studentEvaluation_map">
+		select * from evaluation_info e left join 
+		student_info s on e.student_id=s.student_id
+		where evaluation_id=#{id}
+	</select>
+	
+	<!-- 模糊查询 -->
+	<select id="findByTitle" resultMap="studentEvaluation_map">
+		select * from evaluation_info e left join 
+    	student_info s on e.student_id=s.student_id
+		where e.evaluation_title like '%${title}%'
+	</select>
+	
+</mapper>

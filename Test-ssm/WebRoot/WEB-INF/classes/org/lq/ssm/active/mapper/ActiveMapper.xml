@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.active.dao.ActiveDao">
+
+	<resultMap type="active" id="active_map">
+	<id property="id" column="ACTIVE_ID"/>
+	<result property="activeName" column="ACTIVE_NAME"/>
+	<result property="starDate" column="ACTIVE_START_TIME"/>
+	<result property="endDate" column="ACTIVE_END_TIME"/>
+	<result property="costEmtimente" column="ACTIVE_COSTE_EMTIMENTE"/>
+	<result property="realCost" column="ACTIVE_COSTE"/>
+	<result property="expectStudent" column="ACTIVE_STUDENT"/>
+	<result property="activeDescription" column="ACTIVE_DESC" ></result> 
+	<association property="reflect" column="ACTIVE_REFECF_EMTIMENTE" resultMap="refecf_map"></association>
+	<association property="activeState" column="ACTIVE_STATE" resultMap="state_map"></association>
+	<association property="activeType" column="ACTIVE_TYPE" resultMap="type_map"></association> 
+	<association property="staff" column="STAFF_ID" resultMap="staff_map"></association>
+	</resultMap>
+	
+	<resultMap type="staff" id="staff_map">
+          <id property="sid" column="staff_id"/>
+          <result property="name" column="staff_name"/>
+    </resultMap>
+    
+	<resultMap type="dictionory" id="state_map">
+           <id property="id" column="state_id"/>
+           <result property="context" column="statecontext"/>
+      </resultMap>
+      
+      <resultMap type="dictionory" id="type_map">
+           <id property="id" column="type_id"/>
+           <result property="context" column="typecontext"/>
+      </resultMap>
+      
+      <resultMap type="dictionory" id="refecf_map">
+           <id property="id" column="refecf_id"/>
+           <result property="context" column="refecfcontext"/>
+      </resultMap>
+      
+      
+	<insert id="save" parameterType="active">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+		select active_seq.nextval from dual
+	</selectKey>
+		insert into active_info
+  		(active_id, staff_id, active_name, active_state, 
+  		active_start_time, active_end_time, active_type, 
+  		active_coste_emtimente, active_coste, active_refecf_emtimente, 
+  		active_student, active_desc)
+		values
+		(#{id},1,#{activeName},#{activeState.id},#{starDate},
+		#{endDate},#{activeType.id},#{costEmtimente},#{realCost},
+		#{reflect.id},#{expectStudent},#{activeDescription})
+	</insert>
+
+
+	<select id="findSeq" resultType="int">
+		select ACTIVE_SEQ.nextval from dual
+	</select>
+	
+	<delete id="delete" parameterType="active">
+		delete active_info where active_id=#{id}
+	</delete>
+	
+	
+	<update id="update" parameterType="active">
+	update active_info
+	set
+       staff_id =1,
+       active_name =#{activeName},
+       active_state =#{activeState.id},
+       active_start_time =#{starDate},
+       active_end_time =#{endDate},
+       active_type =#{activeType.id},
+       active_coste_emtimente = #{costEmtimente},
+       active_coste =#{realCost},
+       active_refecf_emtimente =#{reflect.id},
+       active_student =#{expectStudent},
+       active_desc = #{activeDescription}
+ 	where active_id =#{id}
+	</update>
+	
+	<select id="findAll" resultMap="active_map">
+	select a.*,s.staff_name from active_data_dictionory a ,staff_info s where a.staff_id=s.staff_id
+	</select>
+	
+	
+	<select id="findById" resultMap="active_map">
+	select * from active_data_dictionory where active_id=#{id}	
+	</select>
+	
+	
+	<select id="findByCon" resultMap="active_map">
+		select a.*,s.staff_name from active_data_dictionory a ,staff_info s where a.staff_id=s.staff_id
+		<if test="name!=null">
+		and a.active_name like '%${name}%' 
+		</if>
+		<if test="state!=null">
+		and a.active_state =#{state}
+		</if>
+	</select>
+</mapper>

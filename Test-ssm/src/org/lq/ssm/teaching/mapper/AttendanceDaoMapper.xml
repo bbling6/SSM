@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.teaching.dao.AttendanceDao">
+	<resultMap type="attendance" id="att_map">
+		<id property="aid" column="attendance_id" />
+		<result property="content" column="attendance_content" />
+		<result property="desc" column="attendance_desc" />
+		<result property="state" column="attendance_state" />
+		<result property="time" column="attendance_time" />
+		<association property="student" resultMap="student_map"></association>
+	</resultMap>
+	<resultMap type="student" id="student_map">
+		<id property="id" column="stid" />
+		<result property="name" column="student_name" />
+
+	</resultMap>
+
+
+	<insert id="save">
+		<selectKey keyProperty="aid" order="BEFORE" resultType="int">
+			select attendance_seq.nextval from dual
+	</selectKey>
+		insert into
+		attendance_info(attendance_id,attendance_content,attendance_desc,attendance_state,attendance_time,student_id)
+		values(#{aid},#{content},#{desc},#{state},#{time},#{student.id})
+	</insert>
+
+	<select id="findAll" resultMap="att_map">
+		select a.*,s.student_id stid,s.student_name from attendance_info a left join
+		student_info s
+		on a.student_id=s.student_id		
+	</select>
+
+	<select id="findByName" resultMap="att_map">
+		select a.*,s.student_id stid,s.student_name from attendance_info a left join
+		student_info s
+		on a.student_id=s.student_id where s.student_name like '%${name}%'
+	</select>
+
+	<select id="findById" resultMap="att_map">
+		select a.*,s.student_id stid,s.student_name from attendance_info a left join
+		student_info s
+		on a.student_id=s.student_id where attendance_id=#{id}	
+	</select>
+
+	<update id="update">
+		update attendance_info set 
+		attendance_content=#{content},
+		attendance_desc=#{desc},
+		attendance_state=#{state},
+		attendance_time=#{time}, 
+		student_id=#{student.id}
+		where attendance_id=#{aid}
+	</update>
+
+
+	<delete id="delete">
+		delete from attendance_info where attendance_id=#{aid}
+	</delete>
+
+
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.system.dao.AnthortyDao">
+  
+  <resultMap type="anthorty" id="Anthorty_map">
+      <id property="aid" column="aid"/>
+      <result property="name" column="aname"/>
+      <result property="desc" column="anthony_desc"/>
+      <result property="url" column="anthony_url"/>
+      <association property="parent" resultMap="parent_map"></association>
+      <collection property="childrens" resultMap="children_map"></collection>
+  </resultMap>
+  <!-- 父级对象的 -->
+   <resultMap type="anthorty" id="parent_map">
+       <id property="aid" column="aid"/>
+      <result property="name" column="aname"/>
+      <result property="desc" column="anthony_desc"/>
+      <result property="url" column="anthony_url"/>
+   </resultMap>
+    <!-- 子级集合的 -->
+    <resultMap type="anthorty" id="children_map">
+    <id property="aid" column="aids"/>
+         <result property="name" column="anames"/>
+         <result property="desc" column="anthony_desc"/>
+         <result property="url" column="anthony_url"/>
+    </resultMap>
+  
+  <!-- 查询子级(用于生成树 完成) -->
+   <select id="findAllMenu" resultMap="Anthorty_map">
+select a1.anthony_id as aid,a1.anthony_name as aname,a2.anthony_id as aids,a2.anthony_name as anames,a2.anthony_url from anthony a1 
+inner join anthony a2 on a1.anthony_id=a2.ant_anthony_id  
+    
+   </select>
+   <!-- 查询父级 -->
+   <select id="findParent" resultMap="Anthorty_map">
+     select a1.anthony_id as aid, a1.ant_anthony_id,a1.anthony_name 
+     as aname,a1.anthony_desc,a1.anthony_url from anthony a1  
+     where a1.ant_anthony_id is null
+   </select>
+   
+   <!-- 权限添加(后台测试完成) -->
+   <insert id="save" parameterType="anthorty">
+      <selectKey keyProperty="aid" resultType="int" order="BEFORE">
+         select anthorty_seq.nextval from dual
+      </selectKey>
+    insert into anthony
+    (anthony_id, ant_anthony_id, anthony_name, anthony_desc, anthony_url)
+    values
+    (#{aid}, #{parent.aid}, #{name}, #{desc}, #{url})
+   </insert>
+   <!-- findById(根据Id查询) -->
+   <select id="findById" resultMap="Anthorty_map">
+     select a1.anthony_id as aid, a1.ant_anthony_id,a1.anthony_name 
+     as aname,a1.anthony_desc,a1.anthony_url from anthony a1 where a1.anthony_id=#{id}
+   </select>
+   <!-- 修改权限 -->
+   <update id="update" parameterType="anthorty">
+   update anthony
+   set anthony_id =#{aid},
+       ant_anthony_id =#{parent.aid},
+       anthony_name = #{name},
+       anthony_desc = #{desc},
+       anthony_url =#{url}
+   where anthony_id = #{aid}
+   </update>
+   <!-- 权限删除 -->
+   <delete id="delete" parameterType="anthorty">
+    delete anthony where anthony_id = #{id} 
+   </delete>
+</mapper>
+

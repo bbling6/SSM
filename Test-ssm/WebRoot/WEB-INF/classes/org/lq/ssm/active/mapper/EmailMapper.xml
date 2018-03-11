@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.active.dao.EmailDao">
+	<resultMap type="email" id="email_map">
+	<id property="id" column="EMAIL_ID"/>
+	<result property="title" column="EMAIL_TITLE"/>
+	<result property="emailContent" column="EMAIL_CONTENT"/>
+	<result property="postTime" column="EMAIL_TIME"/>
+	<result property="receiveMan" column="EMAIL_MAN"/>
+	<result property="receiveAddress" column="EMAIL_ADDRESS"/>
+	<result property="emailState" column="EMAIL_STATE"/>
+	<association property="staff" column="STAFF_ID" resultMap="staff_map"></association> 
+	</resultMap>
+	
+	<resultMap type="staff" id="staff_map">
+          <id property="sid" column="staff_id"/>
+          <result property="name" column="staff_name"/>
+    </resultMap>
+	
+	<!-- 保存 (后台测试成功)-->
+	<insert id="save" parameterType="email">
+		<selectKey keyProperty="id" resultType="Integer" order="BEFORE">
+			select
+			email_seq.nextval from dual
+      </selectKey>
+		insert into email_info
+		(EMAIL_ID, EMAIL_TITLE, EMAIL_CONTENT,
+		EMAIL_TIME, EMAIL_MAN,
+		EMAIL_ADDRESS,EMAIL_STATE,STAFF_ID)
+		values
+		(#{id},#{title}, #{emailContent}, #{postTime}, #{receiveMan}, #{receiveAddress},#{emailState},#{staff.sid})
+	</insert>
+	
+	
+	<select id="findAll" resultMap="email_map">
+	select * from email_info e,staff_info s where e.STAFF_ID=s.staff_id
+	</select>
+	
+	<select id="findById" resultMap="email_map">
+		select * from email_info e inner join staff_info s 
+		on e.staff_id=s.staff_id and e.email_id=#{id}
+	</select>
+	
+	<delete id="delete" parameterType="email">
+		delete email_info where EMAIL_ID=#{id}
+	</delete>
+	
+	<select id="findByTitle" resultMap="email_map">
+		select * from email_info e,staff_info s 
+		where e.STAFF_ID=s.staff_id and EMAIL_TITLE like '%${title}%'
+	</select>
+	
+		
+</mapper>

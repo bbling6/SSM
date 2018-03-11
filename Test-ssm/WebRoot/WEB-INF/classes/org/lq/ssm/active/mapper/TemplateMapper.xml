@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.active.dao.TemplateDao">
+	
+	<resultMap type="template" id="template_map">
+		<id property="id" column="TEMPLATE_ID"/>
+		<result property="tempTittle" column="TEMPLATE_TITLE"/>
+		<result property="tempType" column="TEMPLATE_TYPE"/>
+		<result property="tempContent" column="TEMPLATE_CONTENT"/>
+	</resultMap>
+	
+	<insert id="save" parameterType="template">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	select template_seq.nextval from dual
+	</selectKey>
+	insert into template_info
+ 	 (template_id, template_content, template_type, template_title)
+	values
+  	(#{id}, #{tempContent}, #{tempType}, #{tempTittle})
+	</insert>
+	
+	<delete id="delete" >
+		delete template_info where template_id =#{id}
+	</delete>
+	
+	<update id="update" parameterType="template">
+		update template_info
+  	 set 
+       template_content =#{tempContent},
+       template_type =#{tempType},
+       template_title =#{tempTittle}
+	 where template_id =#{id}
+	</update>
+	
+	<select id="findById" resultMap="template_map">
+		select * from template_info where template_id=#{id}
+	</select>
+	<select id="findAll" resultMap="template_map">
+	<![CDATA[ 
+		select * from template_info
+		]]>
+	</select>
+	<select id="findMsg" resultMap="template_map">
+	<![CDATA[ 
+		select * from template_info where TEMPLATE_TYPE='短信'
+		]]>
+	</select>
+	<select id="findEma" resultMap="template_map">
+	<![CDATA[ 
+		select * from template_info where TEMPLATE_TYPE='邮件'
+		]]>
+	</select>
+
+	<select id="findSeq" resultType="int">
+		select template_seq.nextval from dual
+	</select>
+	<select id="findLike" resultMap="template_map">
+		select * from template_info where TEMPLATE_TITLE like '%${title}%'
+	</select>
+	
+</mapper>

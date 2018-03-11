@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.classinfo.dao.ScheduleDao">
+		<!-- ******************schedule******************* -->
+		<resultMap type="schedule" id="schedule_map">
+			<id property="id" column="COURSE_ID"/>
+			<result property="name" column="COURSE_SCHEDULE_NAME"/>
+			<result property="isuserd" column="COURSE_SCHEDULE_ISUSERD"/>
+			<result property="yi" column="COURSE_YI"/>
+			<result property="er" column="COURSE_ER"/>
+			<result property="san" column="COURSE_SAN"/>
+			<result property="si" column="COURSE_SI"/>
+			<result property="wu" column="COURSE_WU"/>
+			<result property="liu" column="COURSE_LIU"/>
+			<result property="qi" column="COURSE_QI"/>
+		</resultMap>
+
+
+      <select id="findAll" resultMap="schedule_map">
+        <![CDATA[
+         select * from class_schedule
+        ]]>
+      </select>
+      
+      <insert id="save" parameterType="schedule">
+	  	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	  		select schedule_seq.nextval from dual
+	  	</selectKey>
+	  	insert into class_schedule
+          (course_id, course_yi, course_er, course_san, course_si, course_wu, course_liu, course_qi, course_schedule_isuserd, course_schedule_name)
+           values
+           (#{id},#{yi},#{er},#{san},#{si},#{wu},#{liu},#{qi},'有效',#{name})
+                            
+	  </insert>
+	  
+	  <select id="findById" resultMap="schedule_map">
+	  	select * from class_schedule where COURSE_ID=#{id}
+	  </select>
+	  
+	  <!-- 模糊查询 -->
+	  <select id="findByName" resultMap="schedule_map">
+	  	select * from class_schedule where COURSE_SCHEDULE_NAME like '%${name}%'
+	  </select>
+  	
+  	 <!-- 修改 -->
+  	 <update id="update" parameterType="schedule">
+  	 	
+  	 
+  	 	
+  	 </update>
+  	 	
+  	 
+  	 
+  	 <!--删除  -->
+	<delete id="delete">
+		 delete class_schedule where COURSE_ID =#{id}
+	</delete>
+      
+     
+
+  
+</mapper>
+

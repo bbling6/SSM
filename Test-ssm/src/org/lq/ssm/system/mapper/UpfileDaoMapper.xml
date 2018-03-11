@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.system.dao.UpfileDao">
+
+<resultMap type="upfile" id="upfile_map">
+		<id property="id" column="upfile_id" />
+		<result property="uuidname" column="upfile_uuidname" />
+		<result property="filename" column="upfile_filename"/>
+		<result property="savepath" column="upfile_savepath" />
+		<result property="uptime" column="upfile_uptime" />
+		<result property="description" column="upfile_description" />
+		<result property="username" column="upfile_username" />
+		
+</resultMap>
+
+	<!-- 查询全部(后台测试成功) -->
+	<select id="getAll" resultMap="upfile_map">
+        <![CDATA[
+         select * from upfile 
+        ]]>
+
+	</select>
+	<!-- 根据ID查询 -->
+	<select id="find" resultMap="upfile_map">
+        <![CDATA[
+        select * from upfile where upfile_id=#{id}
+        ]]>
+	</select>
+	
+		<!-- 保存 (后台测试成功)-->
+	<insert id="add" parameterType="upfile">
+		<selectKey keyProperty="id" resultType="string" order="BEFORE">
+			select
+			seq_upfile.nextval from dual
+      </selectKey>
+		insert into upfile
+		(upfile_id, upfile_uuidname, upfile_filename,
+		upfile_savepath, upfile_uptime,
+		upfile_description,upfile_username)
+		values
+		(#{id},#{uuidname}, #{filename}, #{savepath}, #{uptime}, #{description},#{username})
+	</insert>
+	
+	 <!-- 删除(后台测试完成) -->
+      <delete id="delete">
+         delete from upfile where upfile_id = #{id}
+      </delete>
+</mapper>

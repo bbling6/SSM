@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.active.dao.MessageDao">
+	<resultMap type="message" id="message_map">
+		<id property="id" column="MESSAGE_ID"/>
+		<result property="receiveMan" column="MESSAGE_MAN"/>
+		<result property="msgContent" column="MESSAGE_CONTENT"/>
+		<result property="receivePhone" column="MESSAGE_PHONE"/>
+		<result property="postTime" column="MESSAGE_TIME"/>
+		<association property="staff" column="STAFF_ID" resultMap="staff_map"></association>
+	</resultMap>
+	<resultMap type="staff" id="staff_map">
+          <id property="sid" column="staff_id"/>
+          <result property="name" column="staff_name"/>
+    </resultMap>
+
+	<select id="findAll" resultMap="message_map">
+		select * from message m inner join staff_info s 
+        where s.staff_id=m.staff_id
+	</select>
+	
+	<select id="findById" resultMap="message_map">
+		select * from message m inner join staff_info s 
+        on s.staff_id=m.staff_id and m.message_id=#{id}
+	</select>
+	
+	<delete id="delete" parameterType="message">
+		delete message where MESSAGE_ID=#{id}
+	</delete>
+	
+	<select id="findByTel" resultMap="message_map">
+		select * from message m inner join staff_info s 
+        on s.staff_id=m.staff_id and MESSAGE_PHONE like '%${tel}%'
+	</select>
+	<insert id="save" parameterType="message">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+		select msg_seq.nextval from dual
+	</selectKey>
+	insert into message
+  	(message_id, staff_id, message_man, message_content, 
+  	message_phone,message_time)
+	values(#{id},1,#{receiveMan},#{msgContent},
+	#{receivePhone},#{postTime})
+ 
+	</insert>
+</mapper>

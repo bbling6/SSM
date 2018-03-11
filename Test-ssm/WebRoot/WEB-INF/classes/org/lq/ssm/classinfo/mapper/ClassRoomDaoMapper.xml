@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.classinfo.dao.ClassRoomDao">
+		 <!-- ******************classRoom******************* -->
+       <resultMap type="classRoom" id="classRoom_map">
+		<id property="id" column="CLASSROOM_ID"/>
+		<result property="name" column="CLASSROOM_NAME"/>
+		<result property="max" column="CLASSROOM_MAX"/>
+		<result property="info" column="CLASSROOM_INFO"/>
+		<result property="desc" column="CLASSROOM_DESC"/>
+		</resultMap>
+		
+
+
+      <select id="findAll" resultMap="classRoom_map">
+        <![CDATA[
+         select * from classroom_info
+        ]]>
+       
+      </select>
+      
+	  <insert id="save" parameterType="classRoom">
+	  	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	  		select classRoom_seq.nextval from dual
+	  	</selectKey>
+	  	
+	  	insert into classroom_info
+          (classroom_id, classroom_name, classroom_max, classroom_info, classroom_desc)
+        values
+         (#{id},#{name},#{max},#{info},#{desc})
+                            
+	  </insert>
+	  
+	  <select id="findById" resultMap="classRoom_map">
+	  	select * from classroom_info where CLASSROOM_ID=#{id}
+	  </select>
+	  
+	  <!-- 模糊查询 -->
+	  <select id="findByName" resultMap="classRoom_map">
+	  	select * from classroom_info where CLASSROOM_NAME like '%${name}%'
+	  </select>
+  	
+  	 <!-- 修改 -->
+  	 <update id="update" parameterType="subject">
+  	 	update classroom_info
+            set classroom_id =#{id},
+            	classroom_name =#{name},
+                classroom_max =#{max},
+                classroom_info =#{info},
+                classroom_desc =#{desc}
+              where classroom_id =#{id}
+  	 </update>
+  	 
+  	 
+  	 
+  	 <!--删除  -->
+	<delete id="delete">
+		 delete classroom_info where classroom_id =#{id}
+	</delete>
+      
+      
+  
+</mapper>
+

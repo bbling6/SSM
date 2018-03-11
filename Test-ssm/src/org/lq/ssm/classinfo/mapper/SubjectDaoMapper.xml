@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.classinfo.dao.SubjectDao">
+		<!-- ******************subject******************* -->
+		<resultMap type="subject" id="subject_map">
+			<id property="id" column="SUBJECT_ID"/>
+			<result property="name" column="SUBJECT_name"/>
+			<result property="money" column="SUBJECT_money"/>
+			<result property="hour" column="SUBJECT_HOUR"/>
+			<result property="desc" column="SUBJECT_DESC"/>
+			<result property="isused" column="SUBJECT_ISUSED"/>
+		</resultMap>
+		
+
+
+      <select id="findAll" resultMap="subject_map">
+        <![CDATA[
+         select * from subject_info where subject_isused='有效'
+        ]]>
+       
+      </select>
+      
+      
+	  <insert id="save" parameterType="subject">
+	  	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	  		select subject_seq.nextval from dual
+	  	</selectKey>
+	  	
+	  	insert into subject_info
+         (subject_id, subject_name, subject_money, subject_hour, subject_desc, subject_isused)
+         values
+         (#{id},#{name},#{money},#{hour},#{desc},'有效')
+                            
+	  </insert>
+	  
+	  <select id="findById" resultMap="subject_map">
+	  	select * from subject_info where subject_isused='有效' and SUBJECT_ID=#{id}
+	  </select>
+	  
+	  <!-- 模糊查询 -->
+	  <select id="findByName" resultMap="subject_map">
+	  	select * from subject_info where subject_isused='有效' and SUBJECT_name like '%${name}%'
+	  </select>
+  	
+  	 <!-- 修改 -->
+  	 <update id="updete" parameterType="subject">
+  	 	update subject_info
+            set subject_id = #{id},
+                subject_name = #{name},
+                subject_money = #{money},
+                subject_hour = #{hour},
+                subject_desc = #{desc},
+                subject_isused = '有效'
+            where subject_id = #{id}
+  	 </update>
+  	 
+  	 
+  	 
+  	 <!--删除  -->
+	<delete id="delete">
+		 update subject_info set subject_isused='无效' where subject_id = #{id}
+	</delete>
+</mapper>
+

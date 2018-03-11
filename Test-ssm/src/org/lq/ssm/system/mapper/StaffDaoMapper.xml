@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.system.dao.StaffDao">
+
+	<resultMap type="staff" id="staff_map">
+		<id property="sid" column="staff_id" />
+		<result property="name" column="staff_name" />
+		<result property="sex" column="staff_sex" />
+		<result property="age" column="staff_age" />
+		<result property="place" column="staff_native_place"/>
+		<result property="idcard" column="staff_idcard" />
+		<result property="birthday" column="staff_birthday" />
+		<result property="office" column="staff_office_phone" />
+		<result property="phone" column="staff_mobile_phone" />
+		<result property="email" column="staff_email" />
+		<result property="address" column="staff_address" />
+		<result property="qq" column="staff_qq" />
+		<result property="hiredate" column="staff_hiredate" />
+		<result property="edulevel" column="staff_eduction_level" />
+		<result property="desc" column="staff_desc" />
+		<result property="state" column="staff_state" />
+		<result property="password" column="staff_password" />
+		<result property="number" column="staff_number" />
+		<association property="roles" column="rid" resultMap="staff_role"></association>
+	</resultMap>
+
+	<resultMap type="role" id="staff_role">
+		<id property="rid" column="role_id" />
+		<result property="name" column="role_name" />
+		<result property="desc" column="role_desc" />
+		<result property="state" column="role_state" />
+	</resultMap>
+
+	<!-- 查询全部(后台测试成功) -->
+	<select id="findAll" resultMap="staff_map">
+        <![CDATA[
+         select * from staff_info 
+        ]]>
+
+	</select>
+	<!-- 根据ID查询 -->
+	<select id="findById" resultMap="staff_map">
+        <![CDATA[
+        select * from staff_info where staff_id=#{id}
+        ]]>
+	</select>
+	<!-- 条件查询(后台测试成功) -->
+	<select id="likename" resultMap="staff_map">
+		select * from staff_info
+		<where>
+			<if test="name!=null">staff_name=#{name}</if>
+			<if test="sex!=null">staff_sex=#{sex}</if>
+		</where>
+    </select>
+    
+    	<!-- 验证用户登陆，根据名字和密码 -->
+	<select id="check" resultMap="staff_map">
+		select * from staff_info
+		where
+			staff_name=#{name}
+			and staff_password=#{password}
+		
+    </select>
+    		
+	  
+	
+	<!-- 保存 (后台测试成功)-->
+	<insert id="save" parameterType="staff">
+		<selectKey keyProperty="sid" resultType="int" order="BEFORE">
+			select
+			staff_seq.nextval from dual
+      </selectKey>
+		insert into staff_info
+		(staff_id, role_id, staff_name, staff_sex,
+		staff_age, staff_native_place,
+		staff_idcard, staff_birthday,
+		staff_office_phone, staff_mobile_phone,
+		staff_email, staff_address,
+		staff_qq, staff_hiredate,
+		staff_eduction_level, staff_desc,
+		staff_state, staff_number,
+		staff_password)
+		values
+		(#{sid}, #{roles.rid},
+		#{name}, #{sex}, #{age}, #{place}, #{idcard},
+		#{birthday}, #{office},
+		#{phone}, #{email}, #{address}, #{qq},
+		#{hiredate}, #{edulevel},
+		#{desc}, #{state}, #{number}, #{password})
+	</insert>
+	
+	
+	<!-- 更新 (后台测试没问题)-->
+	<update id="update" parameterType="staff">
+		update staff_info
+		set staff_id = #{sid},
+		role_id = #{roles.rid},
+		staff_name = #{name},
+		staff_sex = #{sex},
+		staff_age = #{age},
+		staff_native_place = #{place},
+		staff_idcard = #{idcard},
+		staff_birthday =#{birthday},
+		staff_office_phone = #{office},
+		staff_mobile_phone = #{phone},
+		staff_email = #{email},
+		staff_address = #{address},
+		staff_qq =#{qq},
+		staff_hiredate = #{hiredate},
+		staff_eduction_level =#{edulevel},
+		staff_desc = #{desc},
+		staff_state =#{state},
+		staff_number = #{number},
+		staff_password =#{password}
+		where staff_id = #{sid}
+	  </update>
+    <!-- 删除(后台测试完成) -->
+      <delete id="delete">
+         delete from staff_info where staff_id = #{sid}
+      </delete>
+    <!-- 更新角色 -->
+     <update id="updateRole" parameterType="staff">
+       udpate staff_info set role_id=#{roles.rid} where staff_id = #{sid}
+     </update>
+     <!-- 根据姓名查询 -->
+     <select id="findByname" resultMap="staff_map">
+	  	select * from staff_info where STAFF_NAME=#{name}
+	  </select>
+	  <select id="findTeacher" resultMap="staff_map">
+	   select * from role r  left join staff_info s  on s.role_id=r.role_id where role_name='教师' 
+	  </select>  
+</mapper>
+

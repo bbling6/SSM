@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.classinfo.dao.ClassesDao">
+       <resultMap type="classes" id="classes_map">
+          <id property="id" column="CLASS_ID"/>
+          <result property="name" column="CLASS_NAME"/>
+          <result property="num" column="CLASS_NUMBER"/>
+          <result property="start" column="CLASS_START_TIME"/>
+          <result property="end" column="CLASS_END_TIME"/>
+          <result property="isused" column="CLASS_ISUSED"/>
+          <result property="state" column="CLASS_STATE"/>
+          <result property="desc" column="CLASS_DESC"/>
+          
+          
+          <association property="classRoom" column="CLASSROOM_ID" resultMap="classRoom_map"></association>
+          <association property="subject" column="SUBJECT_ID" resultMap="subject_map"></association>
+          <association property="schedule" column="COURSE_ID" resultMap="schedule_map"></association>
+          <association property="staff" column="STAFF_ID" resultMap="staff_map"></association>
+          
+          <!--<association property="classRoom" column="CLASSROOM_ID" select="getClassRoomByName"></association>
+          <association property="subject" column="SUBJECT_ID" select="getSubjectByName"></association>
+          <association property="schedule" column="COURSE_ID" select="getScheduleByName"></association>
+          <association property="staff" column="STAFF_ID" select="getStaffByName"></association>
+          
+          
+      --></resultMap>
+       
+       <!-- ******************classRoom******************* -->
+       <resultMap type="classRoom" id="classRoom_map">
+		<id property="id" column="CLASSROOM_ID"/>
+		<result property="name" column="CLASSROOM_NAME"/>
+		<result property="max" column="CLASSROOM_MAX"/>
+		<result property="info" column="CLASSROOM_INFO"/>
+		<result property="desc" column="CLASSROOM_DESC"/>
+		</resultMap>
+		
+		<!-- ******************subject******************* -->
+		<resultMap type="subject" id="subject_map">
+			<id property="id" column="SUBJECT_ID"/>
+			<result property="name" column="SUBJECT_NAME"/>
+			<result property="money" column="SUBJECT_MONEY"/>
+			<result property="hour" column="SUBJECT_HOUR"/>
+			<result property="desc" column="SUBJECT_DESC"/>
+			<result property="isused" column="SUBJECT_ISUSED"/>
+		</resultMap>
+		
+		<!-- ******************schedule******************* -->
+		<resultMap type="schedule" id="schedule_map">
+			<id property="id" column="COURSE_ID"/>
+			<result property="name" column="COURSE_SCHEDULE_NAME"/>
+			<result property="isuserd" column="COURSE_SCHEDULE_ISUSERD"/>
+			<result property="yi" column="COURSE_YI"/>
+			<result property="er" column="COURSE_ER"/>
+			<result property="san" column="COURSE_SAN"/>
+			<result property="si" column="COURSE_SI"/>
+			<result property="wu" column="COURSE_WU"/>
+			<result property="liu" column="COURSE_LIU"/>
+			<result property="qi" column="COURSE_QI"/>
+		</resultMap>
+		<!-- *******************staff****************** -->
+		 <resultMap type="staff" id="staff_map">
+          <id property="sid" column="staff_id"/>
+          <result property="name" column="staff_name"/>
+          <result property="sex" column="staff_sex"/>
+          <result property="age" column="staff_age"/>
+          <result property="place" column="staff_native_place"/>
+          <result property="idcard" column="staff_idcard"/>
+          <result property="birthday" column="staff_birthday"/>
+          <result property="office" column="staff_office_phone"/>
+          <result property="phone" column="staff_mobile_phone"/>
+          <result property="email" column="staff_email"/>
+          <result property="address" column="staff_address"/>
+          <result property="qq" column="staff_qq"/>
+          <result property="hiredate" column="staff_hiredate"/>
+          <result property="edulevel" column="staff_eduction_level"/>
+          <result property="desc" column="staff_desc"/>
+          <result property="state" column="staff_state"/>
+          <result property="password" column="staff_password"/>
+          <result property="number" column="staff_number"/>
+       </resultMap>
+	
+		<!-- ******************************************************** 
+		<select id="getClassRoomByName" resultType="classroom">
+			select * from CLASSROOM_INFO where CLASSROOM_NAME=#{name}
+		</select>
+		<select id="getSubjectByName" resultType="subject">
+			select * from SUBJECT_INFO where SUBJECT_NAME=#{name}
+		</select>
+		<select id="getScheduleByName" resultType="schedule">
+			select * from CLASS_SCHEDULE where COURSE_SCHEDULE_NAME=#{name}
+		</select>
+		<select id="getStaffByName" resultType="staff">
+			select * from STAFF_INFO where STAFF_NAME=#{name}
+		</select>
+		-->
+		<!-- ******************************************************** -->
+		
+		<!-- 查询所有班级 -->
+      <select id="findAll" resultMap="classes_map">
+        <![CDATA[
+         select * from class_info
+        ]]>
+       
+     </select>
+      <!-- 插入班级 -->
+	  <insert id="save" parameterType="classes">
+	  	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+	  		select class_seq.nextval from dual
+	  	</selectKey>
+	  	
+	  	insert into class_info
+         (class_id, classroom_id, subject_id, staff_id, course_id, class_name, class_number, class_start_time, class_end_time, class_isused, class_state, class_desc)
+         values
+	  	(#{id},#{classRoom.id},#{subject.id},#{staff.sid},#{schedule.id},#{name},#{num},#{start},#{end},'培训','有效',#{desc})
+	  </insert>
+	  <!-- 模糊查询 -->
+	  <select id="findByName" resultMap="classes_map">
+	  	select * from class_info where class_name like '%${name}%'
+	  </select>
+	  <!-- 根据ID查询 -->
+	  <select id="findById" resultMap="classes_map">
+	  	select * from class_info c left join subject_info s on c.subject_id=s.subject_id 
+		where c.class_id=#{cid}
+	  </select>
+	  
+		  <!--删除  -->
+		<delete id="delete">
+			 delete class_info where class_id =#{id}
+		</delete>
+</mapper>
+

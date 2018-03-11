@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.finance.dao.StuPayDao">
+	<resultMap type="stu_Payment" id="stupay_map">
+		<id property="pid" column="PAYMENT_ID"/>
+		<result property="situatic" column="PAYMENT_SITUATIC"/>
+		<result property="time" column="PAYMENT_TIME"/>
+		<result property="disamount" column="DISCOUNT_AMOUNT"/>
+		<result property="should" column="SHOULD_AMOUNT"/>
+		<result property="real" column="REAL_AMOUNT"/>
+		<result property="debt" column="DEBT_AMOUNT"/>
+		<result property="desc" column="PAYMENT_DESC"/>
+		<association property="staff" column="STAFF_ID" resultMap="sta_map"></association>
+		<association property="student" column="STUDENT_ID" resultMap="stu_map"></association>
+		<association property="method" column="PAYMENT_METHOD" resultMap="dic_map"></association>
+	</resultMap>
+	<resultMap type="staff" id="sta_map">
+		<id property="sid" column="staid"/>
+		<result property="name" column="staname"/>
+	</resultMap>
+	<resultMap type="student" id="stu_map">
+		<id property="id" column="stuid"/>
+		<result property="name" column="stuname"/>
+	</resultMap>
+	<resultMap type="dictionory" id="dic_map">
+		<id property="id" column="daid"/>
+		<result property="context" column="dcontext"/>
+	</resultMap>
+	<insert id="save" parameterType="stu_Payment">
+		<selectKey keyProperty="pid" order="BEFORE" resultType="int">
+			select stupay_seq.nextval from dual
+		</selectKey>
+		insert into student_payment
+		(payment_id, staff_id, student_id, payment_situatic, payment_method, payment_time, discount_amount, should_amount, real_amount, debt_amount, payment_desc)
+		values
+		(#{pid},#{staff.sid},#{student.id},#{situatic},#{method.id},#{time},#{disamount},#{should},#{real},#{debt},#{desc})
+	</insert>
+	<select id="findpaybysid" parameterType="int" resultMap="stupay_map">
+		select p.*,sta.staff_id staid,sta.staff_name staname,stu.student_id stuid,stu.student_name stuname,d.data_id daid,d.data_context dcontext
+		from student_payment p 
+		left join staff_info sta on p.staff_id=sta.staff_id
+		left join student_info stu on p.student_id=stu.student_id
+		left join data_dictionory d on p.payment_method=d.data_id
+		where p.student_id=#{sid}
+	</select>
+	<select id="should" resultType="double">
+		select * from
+		(select t.debt_amount from student_payment t where t.student_id=#{sid} order by t.payment_time desc )
+		where rownum =1
+	</select>
+</mapper>

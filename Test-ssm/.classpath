@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_6_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/standard.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/commons-logging.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-aop-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-beans-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-context-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-core-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-expression-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-jdbc-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-tx-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-web-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/spring/spring-webmvc-4.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/displaytag-1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/displaytag-export-poi-1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/itext-1.3.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/jcl104-over-slf4j-1.4.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/poi-3.2-FINAL.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/slf4j-api-1.4.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/slf4j-log4j12-1.4.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/page/standard-1.0.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mybatis/mybatis-3.2.7.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mybatis/mybatis-spring-1.2.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mybatis/ojdbc5.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mysql-connector-java-5.1.7-bin.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/upfile/commons-fileupload.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/upfile/commons-io.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail/activation.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail/mail.jar" sourcepath="D:/java-study/小代码工具类/javamail/mail.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail/commons-email-1.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_79"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
+</classpath>

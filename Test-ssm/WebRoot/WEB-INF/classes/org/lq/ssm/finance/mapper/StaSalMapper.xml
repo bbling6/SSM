@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.finance.dao.StaSalDao">
+	<resultMap type="staff_Salary" id="satsal_map">
+		<id property="ssid" column="STAFF_SALARY_ID"></id>
+		<result property="totsal" column="TOTAL_SALARY"/>
+		<result property="desal" column="DEDUCT_SALARY"/>
+		<result property="resal" column="REAL_STAFF"/>
+		<result property="isused" column="IS_USED"/>
+		<result property="saldate" column="STAFF_SALARY_TIME"/>
+		<result property="remark" column="STAFF_REMARK"/>
+		<association property="staid" column="STAFF_ID" resultMap="sta_map"></association>
+		<association property="stasid" column="STA_STAFF_ID" resultMap="stas_map"></association>
+	</resultMap>
+	<resultMap type="staff" id="sta_map">
+          <id property="sid" column="staid"/>
+          <result property="name" column="stasname"/>
+	</resultMap>	
+	<resultMap type="staff" id="stas_map">
+		<id property="sid" column="statid"/>
+		<result property="name" column="statname"/>
+	</resultMap>
+		
+		
+	<insert id="save" parameterType="staff_Salary">
+	<selectKey keyProperty="ssid" resultType="int" order="BEFORE">
+		select satsal_seq.nextval from dual
+	</selectKey>
+	insert into staff_salary
+  	(staff_salary_id, staff_id, sta_staff_id, total_salary, deduct_salary, real_staff, is_used, staff_remark)
+	values(#{ssid}, #{staid.sid}, #{stasid.sid},#{totsal},#{desal},#{resal},#{isused},#{remark})
+	</insert>
+	
+	<select id="findAll" resultMap="satsal_map">
+		select t.*,s.staff_id staid,s.staff_name stasname,f.staff_id statid,f.staff_name statname from 
+		staff_salary t left join staff_info s on t.staff_id=s.staff_id 
+		left join staff_info f on t.sta_staff_id=f.staff_id
+	</select>
+	<select id="getsalbysid" resultMap="satsal_map">
+		select t.*,s.staff_id staid,s.staff_name stasname,f.staff_id statid,f.staff_name statname from 
+		staff_salary t left join staff_info s on t.staff_id=s.staff_id 
+		left join staff_info f on t.sta_staff_id=f.staff_id
+		where t.STAFF_ID=#{sid}
+	</select>
+	<update id="update">
+		update staff_salary set STAFF_SALARY_TIME=sysdate,IS_USED='是' where STAFF_SALARY_ID=#{stid}
+	</update>
+</mapper>

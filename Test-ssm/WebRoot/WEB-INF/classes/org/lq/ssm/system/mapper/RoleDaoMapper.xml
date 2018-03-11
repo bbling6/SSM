@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.system.dao.RoleDao">
+   <resultMap type="role" id="role_map">
+        <id property="rid" column="role_id"/>
+        <result property="name" column="role_name"/>
+        <result property="desc" column="role_desc"/>
+        <result property="state" column="role_state"/>
+        <collection property="anthortys" resultMap="anthorty_map"></collection>
+   </resultMap>
+   
+    <resultMap type="anthorty" id="anthorty_map">
+      <id property="aid" column="anthorty_id"/>
+      <result property="parentId" column="ant_anthorty_id"/>
+      <result property="name" column="anthorty_name"/>
+      <result property="desc" column="anthorty_desc"/>
+      <result property="url" column="anthorty_url"/>
+    </resultMap>
+    <!-- 查询全部(后台测试可用) -->
+     <select id="findAll" resultMap="role_map">
+         select * from role
+     </select>
+     <!-- 根据姓名查询(后台测试可用) -->
+     <select id="likename" resultMap="role_map">
+         select * from role where role_name=#{sname}
+     </select>
+     <!-- 添加 (完成)-->
+     <insert id="save" parameterType="role" >
+       <selectKey keyProperty="rid" resultType="int" order="BEFORE">
+        select role_seq.nextval from dual
+       </selectKey>
+       insert into role (role_id, role_name, role_desc, role_state)
+       values( #{rid}, #{name}, #{desc}, #{state})
+     </insert>
+     <!-- 删除(完成) -->
+     <delete id="delete" parameterType="role">
+       delete from role where role_id=#{rid}
+     </delete>
+     <!-- 根据ID查询(玩成)-->
+     <select id="findById" resultMap="role_map">
+       select * from role where role_id=#{rid} 
+     </select>
+     <!-- 更新(完成) -->
+     <update id="update" parameterType="role">
+       update role
+       set role_id = #{rid},
+       role_name = #{name},
+       role_desc = #{desc}
+       where role_id = #{rid}
+     </update>
+     
+</mapper>
+

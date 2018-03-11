@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.util.dao.DictionoryDao">
+       <resultMap type="dictionory" id="dictionory_map">
+           <id property="id" column="data_id"/>
+           <result property="context" column="data_context"/>
+           <result property="type" column="data_type"/>
+           <result property="desc" column="data_desc"/>
+       </resultMap>
+      
+      <!-- 查询全部 -->
+       <select id="findAll" resultMap="dictionory_map">
+           <![CDATA[
+           select * from data_dictionory
+           ]]>
+       </select>
+       <!-- 根据Id查询 -->
+       <select id="findById" resultMap="dictionory_map">
+          <![CDATA[
+           select * from data_dictionory where data_id=#{id}
+           ]]>
+       </select>
+       <select id="findBytype" resultMap="dictionory_map">
+       	select * from data_dictionory where data_type=#{type}
+       </select>
+       
+</mapper>
+

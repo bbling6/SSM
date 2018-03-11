@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lq.ssm.student.dao.CommunicateDao">
+	<resultMap type="studentCommunicate" id="studentCommunicate_map">
+		<id property="id" column="communicate_id"/>
+		<result property="comtime" column="communicate_time"/>
+		<result property="content" column="communicate_content"/>
+		<association property="student" column="student_id" resultMap="student_map"></association>
+		<association property="staff" column="staff_id" resultMap="staff_map"></association>
+	</resultMap>
+	
+	<resultMap type="student" id="student_map">
+		<id property="id" column="student_id"/>
+		<result property="name" column="student_name"/>
+	</resultMap>
+	<resultMap type="staff" id="staff_map">
+		<id property="sid" column="staff_id"/>
+		<result property="name" column="staff_name"/>
+	</resultMap>
+	
+	<!-- 查询全部 -->
+	<select id="findAll" resultMap="studentCommunicate_map">
+		select * from communicate_info t left join
+		student_info s on t.student_id=s.student_id
+		left join staff_info i on t.staff_id=i.staff_id
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="save" parameterType="studentCommunicate">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select communicate_seq.nextval from dual
+		</selectKey>
+		insert into communicate_info
+  		(communicate_id, student_id, staff_id, communicate_time, communicate_content)
+		values
+  		(#{id}, #{student.id}, #{staff.sid}, #{comtime}, #{content})
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="studentCommunicate">
+		update communicate_info
+   set communicate_id = #{id},
+       student_id = #{student.id},
+       staff_id = #{staff.sid},
+       communicate_time = #{comtime},
+       communicate_content = #{content}
+ where communicate_id = #{id}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="studentCommunicate">
+		delete from communicate_info
+ 		where communicate_id = #{id}
+	</delete>
+	
+	<!-- 通过id查询 -->
+	<select id="findById" resultMap="studentCommunicate_map">
+		select * from communicate_info t left join
+		student_info s on t.student_id=s.student_id
+		left join staff_info i on t.staff_id=i.staff_id
+		where communicate_id=#{id}
+	</select>
+	
+	<!-- 模糊查询 -->
+	<select id="findByName" resultMap="studentCommunicate_map">
+		select * from communicate_info t left join
+    student_info s on t.student_id=s.student_id
+    left join staff_info i on t.staff_id=i.staff_id
+    where s.student_name like '%${name}%'
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>
