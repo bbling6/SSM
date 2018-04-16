@@ -1,7 +1,7 @@
 # SSM
 学生校园平台设计，主要是教师和学生都可以登陆,学生使用个人账号注册登录，实现在线选课、进行问题沟通、查看课程信息、发邮件和留言板等功能。
 
-使用 Spring+SpringMVC+MyBetis技术，部署在Tomcat服务器上，程序结构使用MVC模式来设计，采用 Java web 编程，MySQL 数据库的设计。
+使用 Spring+SpringMVC+MyBatis技术，部署在Tomcat服务器上，程序结构使用MVC模式来设计，采用 Java web 编程，MySQL 数据库的设计。
 该项目中重构了Service层和Dao层，面向接口编程。
 
 ；提交表单信息时的前台验证（Js函数）和后台验证（JSR303规范）；文件的上传与下载.
